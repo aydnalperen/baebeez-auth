@@ -19,7 +19,7 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	var user models.UnVerifiedUser
+	var user models.UserAuth
 
 	user.EMail = input.EMail
 
@@ -30,7 +30,7 @@ func Register(ctx *gin.Context) {
 	}
 	user.Password = string(hashedPassword) // user creation is done
 
-	_, err = user.SaveUnVerifiedUser()
+	_, err = user.SaveUserAuth()
 
 	if err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)
@@ -54,9 +54,7 @@ func SaveProfile(ctx *gin.Context) {
 	user.Major = input.Major
 	user.Photo = input.Photo
 	user.Year = input.Year
-	user.Email = input.Email
-	user.Password = input.Password
-	user.Uid = (uuid.New()).String()
+	user.Uid = uuid.NewString()
 
 	_, err := user.SaveUser()
 
@@ -89,6 +87,7 @@ func CurrentUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, err)
 		return
 	}
+
 	user, err := models.GetUserById(user_id)
 
 	if err != nil {
