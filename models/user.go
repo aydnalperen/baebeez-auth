@@ -76,12 +76,3 @@ func GetUserByUid(Uid string) (User, error) {
 
 	return user, nil
 }
-func GetUserById(Id uint) (User, error) {
-	var user User
-
-	if err := DB.First(&user, Id).Error; err != nil {
-		return user, errors.New("User not found!")
-	}
-
-	return user, nil
-}

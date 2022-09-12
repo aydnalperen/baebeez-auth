@@ -88,7 +88,7 @@ func CurrentUser(ctx *gin.Context) {
 		return
 	}
 
-	user, err := models.GetUserById(user_id)
+	user, err := models.GetUserByUid(user_id)
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

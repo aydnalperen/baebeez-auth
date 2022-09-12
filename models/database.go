@@ -36,7 +36,7 @@ func ConnectDataBase() {
 		fmt.Println("connected to database ", Dbdriver)
 	}
 
-	DB.AutoMigrate(&UnVerifiedUser{})
+	DB.AutoMigrate(&UserAuth{})
 	DB.AutoMigrate(&User{})
 
 }
