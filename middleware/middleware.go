@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"go-authapi-adv/utils"
+	"baebeez-auth/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

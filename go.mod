@@ -1,4 +1,4 @@
-module go-authapi-adv
+module baebeez-auth
 
 go 1.18
 

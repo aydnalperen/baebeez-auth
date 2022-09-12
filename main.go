@@ -1,9 +1,9 @@
 package main
 
 import (
-	"go-authapi-adv/controller"
-	"go-authapi-adv/middleware"
-	"go-authapi-adv/models"
+	"baebeez-auth/controller"
+	"baebeez-auth/middleware"
+	"baebeez-auth/models"
 
 	"github.com/gin-gonic/gin"
 )

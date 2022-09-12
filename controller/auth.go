@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"go-authapi-adv/models"
-	"go-authapi-adv/utils"
+	"baebeez-auth/models"
+	"baebeez-auth/utils"
 	"net/http"
 
 	"golang.org/x/crypto/bcrypt"

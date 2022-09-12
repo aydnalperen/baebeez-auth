@@ -1,8 +1,8 @@
 package models
 
 import (
+	"baebeez-auth/utils"
 	"errors"
-	"go-authapi-adv/utils"
 
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
