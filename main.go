@@ -18,7 +18,7 @@ func main() {
 
 	public.POST("/login", controller.Login)
 	public.POST("/register", controller.Register)
-
+	public.POST("/saveprofile", controller.SaveProfile)
 	protected := r.Group("/admin")
 	protected.Use(middleware.JwtAuthMiddleWare())
 	protected.GET("/user", controller.CurrentUser)

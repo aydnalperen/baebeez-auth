@@ -8,6 +8,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func Register(ctx *gin.Context) {
@@ -34,9 +35,37 @@ func Register(ctx *gin.Context) {
 	if err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 	}
-	ctx.JSON(http.StatusOK, gin.H{"message": "validated!"})
+	ctx.JSON(http.StatusOK, gin.H{"message": "registered!", "mail": user.EMail, "password": user.Password})
 }
+func SaveProfile(ctx *gin.Context) {
+	var input models.ProfileInput
 
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var user models.User
+
+	user.Bio = input.Bio
+	user.Department = input.Department
+	user.FirstName = input.FirstName
+	user.LastName = input.LastName
+	user.Major = input.Major
+	user.Photo = input.Photo
+	user.Year = input.Year
+	user.Email = input.Email
+	user.Password = input.Password
+	user.Uid = (uuid.New()).String()
+
+	_, err := user.SaveUser()
+
+	if err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+	}
+	ctx.JSON(http.StatusOK, gin.H{"message": "validated!"})
+
+}
 func Login(ctx *gin.Context) {
 	var input models.LoginInput
 	if err := ctx.ShouldBindJSON(&input); err != nil {
