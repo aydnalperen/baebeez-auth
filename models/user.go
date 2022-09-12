@@ -11,19 +11,20 @@ import (
 type User struct {
 	gorm.Model
 	Uid        string `gorm:"size:255;not null;unique" json:"uid"`
-	Email      string `gorm:"size:255;not null;unique" json:"email"`
-	FirstName  string `gorm:"size:255;not null;" json:"firstname"`
-	LastName   string `gorm:"size:255;not null;" json:"lastname"`
-	Password   string `gorm:"size:255;not null;unique" json:"password"`
 	Photo      string `gorm:"size:255;not null;unique" json:"photo"`
 	Major      string `gorm:"size:255;not null;" json:"major"`
 	Year       int    `gorm:"not null;" json:"year"`
 	Bio        string `gorm:"not null;" json:"bio"`
 	Department string `gorm:"not null;" json:"department"`
+	FirstName  string `gorm:"size:255;not null;" json:"firstname"`
+	LastName   string `gorm:"size:255;not null;" json:"lastname"`
 }
-type UnVerifiedUser struct {
-	EMail    string `json:"email" binding:"required"`
-	Password string `json:"password" binding:"required"`
+type UserAuth struct {
+	gorm.Model
+	Uid        string `gorm:"size:255;not null;unique" json:"uid"`
+	EMail      string `json:"email" binding:"required"`
+	Password   string `json:"password" binding:"required"`
+	IsVerified int    `gorm:"default:0;" json:"is_verified"`
 }
 
 func VerifyPassword(password, hashedPassword string) error {
@@ -35,9 +36,9 @@ func (u *User) SaveUser() (*User, error) {
 	}
 	return u, nil
 }
-func (u *UnVerifiedUser) SaveUnVerifiedUser() (*UnVerifiedUser, error) {
+func (u *UserAuth) SaveUserAuth() (*UserAuth, error) {
 	if result := DB.Create(&u); result.Error != nil {
-		return &UnVerifiedUser{}, result.Error
+		return &UserAuth{}, result.Error
 	}
 	return u, nil
 }
@@ -45,7 +46,7 @@ func (u *UnVerifiedUser) SaveUnVerifiedUser() (*UnVerifiedUser, error) {
 func LoginCheck(username string, password string) (string, error) {
 	var err error
 
-	user := User{}
+	user := UserAuth{}
 
 	err = DB.Model(User{}).Where("username=?", username).Take(&user).Error
 
@@ -65,14 +66,12 @@ func LoginCheck(username string, password string) (string, error) {
 
 	return token, nil
 }
-func GetUserById(id uint) (User, error) {
+func GetUserByUid(Uid string) (User, error) {
 	var user User
 
-	if err := DB.First(&user, id).Error; err != nil {
+	if err := DB.First(&user, Uid).Error; err != nil {
 		return user, errors.New("User not found!")
 	}
-
-	user.Password = ""
 
 	return user, nil
 }

@@ -1,8 +1,6 @@
 package models
 
 import (
-	"fmt"
-	"net/smtp"
 	"os"
 )
 
@@ -19,18 +17,5 @@ func (h *Host) ConnectToMailHost() {
 	h.password = PASSWORD
 }
 func (h *Host) SendEmail(destination []string) {
-	smtpHost := "smtp.gmail.com"
 
-	smtpPort := "587"
-
-	auth := smtp.PlainAuth("", h.from, h.password, smtpHost)
-
-	message := []byte("This is a test message!")
-	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, h.from, destination, message)
-
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Println("Email Sent Successfully!")
 }
