@@ -18,13 +18,14 @@ type User struct {
 	Department string `gorm:"not null;" json:"department"`
 	FirstName  string `gorm:"size:255;not null;" json:"firstname"`
 	LastName   string `gorm:"size:255;not null;" json:"lastname"`
+	IsComp     int    `gorm:"default:0"`
 }
 type UserAuth struct {
 	gorm.Model
 	Uid        string `gorm:"size:255;not null;unique" json:"uid"`
 	EMail      string `json:"email" binding:"required"`
 	Password   string `json:"password" binding:"required"`
-	IsVerified int    `gorm:"default:0;" json:"is_verified"`
+	IsVerified int    `gorm:"default:0;"`
 }
 
 func VerifyPassword(password, hashedPassword string) error {
