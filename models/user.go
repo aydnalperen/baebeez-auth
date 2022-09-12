@@ -59,7 +59,7 @@ func LoginCheck(username string, password string) (string, error) {
 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
 		return "", err
 	}
-	token, err := utils.GenerateToken(user.ID)
+	token, err := utils.GenerateToken(user.Uid)
 
 	if err != nil {
 		return "", err
