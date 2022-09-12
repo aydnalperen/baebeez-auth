@@ -42,7 +42,7 @@ func Login(ctx *gin.Context) {
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "username or password is incorrect."})
 	}
-	token, err := models.LoginCheck(input.UserName, input.Password)
+	token, err := models.LoginCheck(input.Mail, input.Password)
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "username or password is incorrect."})

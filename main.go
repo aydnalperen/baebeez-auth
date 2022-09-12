@@ -11,6 +11,7 @@ import (
 func main() {
 
 	models.ConnectDataBase()
+
 	r := gin.Default()
 
 	public := r.Group("/auth")
