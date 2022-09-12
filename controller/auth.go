@@ -3,9 +3,7 @@ package controller
 import (
 	"go-authapi-adv/models"
 	"go-authapi-adv/utils"
-	"html"
 	"net/http"
-	"strings"
 
 	"golang.org/x/crypto/bcrypt"
 
@@ -20,13 +18,9 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	var user models.User
+	var user models.UnVerifiedUser
 
-	user.Email = input.Mail
-	user.Name = input.Name
-	user.Lastname = input.Lastname
-	//user.Password = input.Password
-	user.Username = input.Username
+	user.EMail = input.EMail
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
 
@@ -34,9 +28,8 @@ func Register(ctx *gin.Context) {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
 	}
 	user.Password = string(hashedPassword) // user creation is done
-	user.Username = html.EscapeString(strings.TrimSpace(user.Username))
 
-	_, err = user.SaveUser()
+	_, err = user.SaveUnVerifiedUser()
 
 	if err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)

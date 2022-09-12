@@ -10,12 +10,20 @@ import (
 
 type User struct {
 	gorm.Model
+	Uid        string `gorm:"size:255;not null;unique" json:"uid"`
 	Email      string `gorm:"size:255;not null;unique" json:"email"`
-	Name       string `gorm:"size:255;not null;unique" json:"name"`
-	Lastname   string `gorm:"size:255;not null;unique" json:"lastname"`
-	Username   string `gorm:"size:255;not null;unique" json:"username"`
+	FirstName  string `gorm:"size:255;not null;" json:"firstname"`
+	LastName   string `gorm:"size:255;not null;" json:"lastname"`
 	Password   string `gorm:"size:255;not null;unique" json:"password"`
-	IsVerified int    `gorm:"size:255;not null;unique; default:0" json:"is_valid"`
+	Photo      string `gorm:"size:255;not null;unique" json:"photo"`
+	Major      string `gorm:"size:255;not null;" json:"major"`
+	Year       int    `gorm:"not null;" json:"year"`
+	Bio        string `gorm:"not null;" json:"bio"`
+	Department string `gorm:"not null;" json:"department"`
+}
+type UnVerifiedUser struct {
+	EMail    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }
 
 func VerifyPassword(password, hashedPassword string) error {
@@ -24,6 +32,12 @@ func VerifyPassword(password, hashedPassword string) error {
 func (u *User) SaveUser() (*User, error) {
 	if result := DB.Create(&u); result.Error != nil {
 		return &User{}, result.Error
+	}
+	return u, nil
+}
+func (u *UnVerifiedUser) SaveUnVerifiedUser() (*UnVerifiedUser, error) {
+	if result := DB.Create(&u); result.Error != nil {
+		return &UnVerifiedUser{}, result.Error
 	}
 	return u, nil
 }
