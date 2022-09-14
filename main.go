@@ -11,11 +11,6 @@ import (
 func main() {
 
 	models.ConnectDataBase()
-	var h models.Host
-
-	h.ConnectToMailHost()
-	emails := []string{"alperenaydn-61@hotmail.com"}
-	h.SendEmail(emails)
 
 	r := gin.Default()
 

@@ -22,7 +22,7 @@ func Register(ctx *gin.Context) {
 	var user models.UserAuth
 
 	user.EMail = input.EMail
-
+	user.Uid = uuid.NewString()
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
 
 	if err != nil {
@@ -31,6 +31,13 @@ func Register(ctx *gin.Context) {
 	user.Password = string(hashedPassword) // user creation is done
 
 	_, err = user.SaveUserAuth()
+
+	verifCode := new(models.VerifCode)
+
+	verifCode.Uid = user.Uid
+	verifCode.VerifCode = models.GetRandomFourDigit()
+
+	models.SendEmail(user.EMail, verifCode.VerifCode)
 
 	if err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)

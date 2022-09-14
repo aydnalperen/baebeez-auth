@@ -18,15 +18,15 @@ func (h *Host) ConnectToMailHost() {
 	h.from = FROM
 	h.password = PASSWORD
 }
-func (h *Host) SendEmail(destination []string) {
+func SendEmail(destination string, verifCode string) {
 	msg := gomail.NewMessage()
-	msg.SetHeader("From", "aydinaalperen@gmail.com")
-	msg.SetHeader("To", "aydinaalperen@gmail.com")
-	msg.SetHeader("Subject", "test")
-	msg.SetBody("text/html", "<b>Gomail test</b>")
+	msg.SetHeader("From", "baebeez.support@protonmail.com")
+	msg.SetHeader("To", destination)
+	msg.SetHeader("Subject", "Baebeez Verification Code")
+	msg.SetBody("text/html", "<b>Your Verification Code : </b>"+verifCode)
 	msg.Attach("")
 
-	n := gomail.NewDialer("smtp.gmail.com", 587, "aydinaalperen@gmail.com", "alptseren61")
+	n := gomail.NewDialer("smtp.gmail.com", 587, "aydinaalperen@gmail.com", "baebeez-914")
 
 	// Send the email
 	if err := n.DialAndSend(msg); err != nil {
