@@ -37,6 +37,8 @@ func Register(ctx *gin.Context) {
 	verifCode.Uid = user.Uid
 	verifCode.VerifCode = models.GetRandomFourDigit()
 
+	verifCode.SaveVerifCode()
+
 	models.SendEmail(user.EMail, verifCode.VerifCode)
 
 	if err != nil {

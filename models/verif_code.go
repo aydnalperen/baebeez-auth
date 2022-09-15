@@ -20,3 +20,9 @@ func GetRandomFourDigit() string {
 	var r = int64(rand.Intn(max-min) + min)
 	return strconv.FormatInt(r, 10)
 }
+func (v *VerifCode) SaveVerifCode() (*VerifCode, error) {
+	if result := DB.Create(&v); result.Error != nil {
+		return &VerifCode{}, result.Error
+	}
+	return v, nil
+}

@@ -1,9 +1,11 @@
 package models
 
 import (
+	"crypto/tls"
+	"fmt"
 	"os"
 
-	gomail "gopkg.in/gomail.v2"
+	"gopkg.in/gomail.v2"
 )
 
 type Host struct {
@@ -19,17 +21,32 @@ func (h *Host) ConnectToMailHost() {
 	h.password = PASSWORD
 }
 func SendEmail(destination string, verifCode string) {
-	msg := gomail.NewMessage()
-	msg.SetHeader("From", "baebeez.support@protonmail.com")
-	msg.SetHeader("To", destination)
-	msg.SetHeader("Subject", "Baebeez Verification Code")
-	msg.SetBody("text/html", "<b>Your Verification Code : </b>"+verifCode)
-	msg.Attach("")
+	m := gomail.NewMessage()
 
-	n := gomail.NewDialer("smtp.gmail.com", 587, "aydinaalperen@gmail.com", "baebeez-914")
+	// Set E-Mail sender
+	m.SetHeader("From", "baebeez.secure@gmail.com")
 
-	// Send the email
-	if err := n.DialAndSend(msg); err != nil {
+	// Set E-Mail receivers
+	m.SetHeader("To", destination)
+
+	// Set E-Mail subject
+	m.SetHeader("Subject", "Baebeez Activation Code")
+
+	// Set E-Mail body. You can set plain text or html with text/html
+	m.SetBody("text/plain", "Your activation code: "+verifCode)
+
+	// Settings for SMTP server
+	d := gomail.NewDialer("smtp.gmail.com", 587, "baebeez.secure@gmail.com", "baebeez-914")
+
+	// This is only needed when SSL/TLS certificate is not valid on server.
+	// In production this should be set to false.
+	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
+
+	// Now send E-Mail
+	if err := d.DialAndSend(m); err != nil {
+		fmt.Println(err)
 		panic(err)
 	}
+
+	return
 }
