@@ -19,6 +19,7 @@ type User struct {
 	FirstName  string `gorm:"size:255;not null;" json:"firstname"`
 	LastName   string `gorm:"size:255;not null;" json:"lastname"`
 	IsComp     int    `gorm:"default:0"`
+	MatchInfo  string `gorm:"size:255;not null;" json:"match_info"`
 }
 type UserAuth struct {
 	gorm.Model
