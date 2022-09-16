@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"crypto/rand"
+	"encoding/hex"
 	"fmt"
 	"os"
 	"strconv"
@@ -18,7 +20,7 @@ func GenerateToken(uid string) (string, error) {
 		return "", err
 	}
 	claims := jwt.MapClaims{}
-	claims["authorized"] = true
+	claims["session_token"] = GenerateSecureToken(16)
 	claims["uid"] = uid
 	claims["expiration_time"] = time.Now().Add(time.Hour * time.Duration(token_lifespan)).Unix()
 
@@ -70,4 +72,11 @@ func ExtractTokenID(c *gin.Context) (string, error) {
 		return uid, nil
 	}
 	return "", nil
+}
+func GenerateSecureToken(length int) string {
+	b := make([]byte, length)
+	if _, err := rand.Read(b); err != nil {
+		return ""
+	}
+	return hex.EncodeToString(b)
 }
