@@ -39,8 +39,6 @@ func Register(ctx *gin.Context) {
 
 	verifCode.SaveVerifCode()
 
-	models.SendEmail(user.EMail, verifCode.VerifCode)
-
 	if err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 	}
