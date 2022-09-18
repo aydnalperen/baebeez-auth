@@ -13,42 +13,46 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GenerateToken(uid string) (string, error) {
+func GenerateToken(uid string, c *gin.Context) (string, error) {
 	token_lifespan, err := strconv.Atoi(os.Getenv("TOKEN_HOUR_LIFESPAN"))
 
 	if err != nil {
 		return "", err
 	}
 	claims := jwt.MapClaims{}
-	claims["session_token"] = GenerateSecureToken(16)
 	claims["uid"] = uid
 	claims["expiration_time"] = time.Now().Add(time.Hour * time.Duration(token_lifespan)).Unix()
-
+	claims["ip"] = c.Request.Header.Get("X-Forwarded-For")
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	return token.SignedString([]byte(os.Getenv("API_SECRET")))
 }
 func ExtractToken(ctx *gin.Context) string {
-	token := ctx.Query("token")
 
-	if token != "" {
-		return token
-	}
 	bearerToken := ctx.Request.Header.Get("Authorization")
 	if len(strings.Split(bearerToken, " ")) == 2 {
 		return strings.Split(bearerToken, " ")[1]
 	}
-	return ""
+	return bearerToken
 
 }
 func TokenValid(c *gin.Context) error {
 	tokenString := ExtractToken(c)
-	_, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
-		}
+
+	var keyFunc jwt.Keyfunc = func(token *jwt.Token) (interface{}, error) {
+		// if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+		// 	return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		// }
+		// claims := token.Claims.(jwt.MapClaims)
+
+		// if user_ip := claims["ip"]; user_ip != c.Request.Header.Get("X-Forwarded-For") {
+		// 	return nil, fmt.Errorf("Different Ip : %v", claims["ip"])
+		// }
+
 		return []byte(os.Getenv("API_SECRET")), nil
-	})
+	}
+	_, err := jwt.Parse(tokenString, keyFunc)
+
 	if err != nil {
 		return err
 	}

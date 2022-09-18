@@ -4,6 +4,7 @@ import (
 	"baebeez-auth/utils"
 	"errors"
 
+	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -24,10 +25,11 @@ type User struct {
 }
 type UserAuth struct {
 	gorm.Model
-	Uid        string `gorm:"size:255;not null;unique" json:"uid"`
-	EMail      string `json:"email" binding:"required"`
-	Password   string `json:"password" binding:"required"`
-	IsVerified int    `gorm:"default:0;"`
+	Uid             string `gorm:"size:255;not null;unique" json:"uid"`
+	EMail           string `gorm:"size:255;not null;unique" json:"email" binding:"required"`
+	Password        string `json:"password" binding:"required"`
+	IsVerified      int    `gorm:"default:0;"`
+	LastConnectedIp string `json:"ip"`
 }
 
 func VerifyPassword(password, hashedPassword string) error {
@@ -46,12 +48,12 @@ func (u *UserAuth) SaveUserAuth() (*UserAuth, error) {
 	return u, nil
 }
 
-func LoginCheck(username string, password string) (string, error) {
+func LoginCheck(mail string, password string, c *gin.Context) (string, error) {
 	var err error
 
 	user := UserAuth{}
 
-	err = DB.Model(User{}).Where("username=?", username).Take(&user).Error
+	err = DB.Model(UserAuth{}).Where("e_mail=?", mail).Take(&user).Error
 
 	if err != nil {
 		return "", err
@@ -61,7 +63,7 @@ func LoginCheck(username string, password string) (string, error) {
 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
 		return "", err
 	}
-	token, err := utils.GenerateToken(user.Uid)
+	token, err := utils.GenerateToken(user.Uid, c)
 
 	if err != nil {
 		return "", err
@@ -69,10 +71,10 @@ func LoginCheck(username string, password string) (string, error) {
 
 	return token, nil
 }
-func GetUserByUid(Uid string) (User, error) {
-	var user User
+func GetUserByUid(Uid string) (UserAuth, error) {
+	var user UserAuth
 
-	if err := DB.First(&user, Uid).Error; err != nil {
+	if err := DB.Model(UserAuth{}).Where("uid=?", Uid).Take(&user).Error; err != nil {
 		return user, errors.New("User not found!")
 	}
 
