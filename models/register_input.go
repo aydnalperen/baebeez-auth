@@ -1,6 +1,6 @@
 package models
 
 type RegisterInput struct {
-	EMail    string `json:"email" binding:"required"`
+	Mail     string `json:"mail" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }

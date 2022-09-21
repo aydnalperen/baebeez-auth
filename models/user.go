@@ -26,7 +26,7 @@ type User struct {
 type UserAuth struct {
 	gorm.Model
 	Uid             string `gorm:"size:255;not null;unique" json:"uid"`
-	EMail           string `gorm:"size:255;not null;unique" json:"email" binding:"required"`
+	Mail            string `gorm:"size:255;not null;unique" json:"mail" binding:"required"`
 	Password        string `json:"password" binding:"required"`
 	IsVerified      int    `gorm:"default:0;"`
 	LastConnectedIp string `json:"ip"`

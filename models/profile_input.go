@@ -9,5 +9,5 @@ type ProfileInput struct {
 	Bio        string `gorm:"not null;" json:"bio"`
 	Department string `gorm:"not null;" json:"department"`
 	Password   string `gorm:"size:255;not null;unique" json:"password"`
-	Email      string `gorm:"size:255;not null;unique" json:"email"`
+	Mail       string `gorm:"size:255;not null;unique" json:"mail"`
 }

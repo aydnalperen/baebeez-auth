@@ -21,7 +21,7 @@ func Register(ctx *gin.Context) {
 
 	var user models.UserAuth
 
-	user.EMail = input.EMail
+	user.Mail = input.Mail
 	user.Uid = uuid.NewString()
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
 
@@ -42,7 +42,7 @@ func Register(ctx *gin.Context) {
 	if err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 	}
-	ctx.JSON(http.StatusOK, gin.H{"message": "registered!", "mail": user.EMail, "password": user.Password})
+	ctx.JSON(http.StatusOK, gin.H{"message": "registered!", "mail": user.Mail, "password": user.Password})
 }
 func SaveProfile(ctx *gin.Context) {
 	var input models.ProfileInput
