@@ -3,7 +3,10 @@ package controller
 import (
 	"baebeez-auth/models"
 	"baebeez-auth/utils"
+	"bytes"
+	"encoding/json"
 	"net/http"
+	"os"
 
 	"golang.org/x/crypto/bcrypt"
 
@@ -31,17 +34,19 @@ func Register(ctx *gin.Context) {
 	user.Password = string(hashedPassword) // user creation is done
 
 	_, err = user.SaveUserAuth()
+	if err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
 
 	verifCode := new(models.VerifCode)
 
 	verifCode.Uid = user.Uid
-	verifCode.VerifCode = models.GetRandomFourDigit()
+	verifCode.VerifCode = models.CreateVerifCode(6)
 
 	verifCode.SaveVerifCode()
 
-	if err != nil {
-		ctx.AbortWithError(http.StatusBadRequest, err)
-	}
+	SendMail(ctx, user.Mail, verifCode.VerifCode)
 	ctx.JSON(http.StatusOK, gin.H{"message": "registered!", "mail": user.Mail, "password": user.Password})
 }
 func SaveProfile(ctx *gin.Context) {
@@ -103,4 +108,58 @@ func CurrentUser(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"message": "success", "data": user})
+}
+
+func SendMail(ctx *gin.Context, receiver string, verifcode string) {
+	data := map[string]string{
+		"email":    os.Getenv("SENDER_EMAIL"),
+		"password": os.Getenv("EMAIL_PASSWORD"),
+	}
+
+	jsonValue, _ := json.Marshal(data)
+
+	resp, err := http.Post(os.Getenv("GET_TOKEN_ADDR"), "application/json", bytes.NewBuffer(jsonValue))
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Internal Error!"})
+		return
+	}
+
+	var res map[string]string
+
+	json.NewDecoder(resp.Body).Decode(&res)
+
+	values := map[string]string{
+		"senderProfileId":      os.Getenv("SENDER_PROFILE_ID"),
+		"receiverEmailAddress": receiver,
+		"subject":              "Baebeez Verification",
+		"content":              "Your Verification Code : " + verifcode,
+	}
+	jsonValue, _ = json.Marshal(values)
+
+	bearer := "Bearer " + res["tokenValue"]
+
+	url := os.Getenv("TRANSACTION_ADDR") + res["accountId"] + "/transactional-email"
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
+
+	if err != nil {
+		panic(err)
+	}
+
+	req.Header.Add("Authorization", bearer)
+
+	req.Header.Add("Content-Type", "application/json")
+
+	client := &http.Client{}
+	second_res, err := client.Do(req)
+
+	if err != nil {
+		panic(err)
+	}
+
+	defer second_res.Body.Close()
+
+	if second_res.StatusCode != http.StatusCreated {
+		panic(second_res.Status)
+	}
 }
