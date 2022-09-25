@@ -7,7 +7,7 @@ COPY go.sum ./
 RUN go mod download
 
 COPY *.go ./
-
+RUN go mod tidy
 RUN go build -o /dist
 
 EXPOSE 8080
