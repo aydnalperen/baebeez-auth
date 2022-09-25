@@ -16,9 +16,7 @@ type User struct {
 	Major      string `gorm:"size:255;not null;" json:"major"`
 	Year       int    `gorm:"not null;" json:"year"`
 	Bio        string `gorm:"not null;" json:"bio"`
-	Department string `gorm:"not null;" json:"department"`
-	FirstName  string `gorm:"size:255;not null;" json:"firstname"`
-	LastName   string `gorm:"size:255;not null;" json:"lastname"`
+	Name       string `gorm:"size:255;not null;" json:"name"`
 	IsComp     int    `gorm:"default:0"`
 	MatchInfo  string `gorm:"size:255;not null;" json:"match_info"`
 	IsApproved int    `gorm:"default:0"`

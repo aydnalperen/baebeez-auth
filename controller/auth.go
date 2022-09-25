@@ -60,9 +60,7 @@ func SaveProfile(ctx *gin.Context) {
 	var user models.User
 
 	user.Bio = input.Bio
-	user.Department = input.Department
-	user.FirstName = input.FirstName
-	user.LastName = input.LastName
+	user.Name = input.Name
 	user.Major = input.Major
 	user.Photo = input.Photo
 	user.Year = input.Year
