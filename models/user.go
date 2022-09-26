@@ -17,7 +17,6 @@ type User struct {
 	Year       int    `gorm:"not null;" json:"year"`
 	Bio        string `gorm:"not null;" json:"bio"`
 	Name       string `gorm:"size:255;not null;" json:"name"`
-	IsComp     int    `gorm:"default:0"`
 	MatchInfo  string `gorm:"size:255;not null;" json:"match_info"`
 	IsApproved int    `gorm:"default:0"`
 }
@@ -26,7 +25,8 @@ type UserAuth struct {
 	Uid             string `gorm:"size:255;not null;unique" json:"uid"`
 	Mail            string `gorm:"size:255;not null;unique" json:"mail" binding:"required"`
 	Password        string `json:"password" binding:"required"`
-	IsVerified      int    `gorm:"default:0;"`
+	IsComp          int    `gorm:"default:0" json:"isverif"`
+	IsVerified      int    `gorm:"default:0;" json:"iscomp"`
 	LastConnectedIp string `json:"ip"`
 }
 
