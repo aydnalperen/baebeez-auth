@@ -51,7 +51,7 @@ func LoginCheck(mail string, password string, c *gin.Context) (string, error) {
 
 	user := UserAuth{}
 
-	err = DB.Model(UserAuth{}).Where("e_mail=?", mail).Take(&user).Error
+	err = DB.Model(UserAuth{}).Where("mail=?", mail).Take(&user).Error
 
 	if err != nil {
 		return "", err
