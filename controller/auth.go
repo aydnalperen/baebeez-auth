@@ -92,7 +92,7 @@ func Logout(ctx *gin.Context) {
 
 }
 func CurrentUser(ctx *gin.Context) {
-	user_id, err := utils.ExtractTokenID(ctx)
+	user_id, err := utils.ExtractTokenUID(ctx)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
 		return
