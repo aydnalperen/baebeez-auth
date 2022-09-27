@@ -10,6 +10,7 @@ import (
 type VerifCode struct {
 	gorm.Model
 	Uid              string `gorm:"size:255;not null;unique" json:"uid"`
+	SendDate         string `gorm:"size:255;not null;unique" json:"send_date"`
 	VerifCode        string `gorm:"size:255;not null;" json:"verif_code"`
 	CodeEntryCounter int    `gorm:"default:0" json:"entry_counter"`
 }
@@ -21,6 +22,15 @@ func (v *VerifCode) SaveVerifCode() (*VerifCode, error) {
 	return v, nil
 }
 
+func GetLastVerifCodeByUid(uid string) string {
+	var verifcode VerifCode
+
+	if result := DB.Model(&VerifCode{}).Where("uid=?", uid).Order("date DESC").First(&verifcode); result != nil {
+		return " "
+	}
+
+	return verifcode.VerifCode
+}
 func CreateVerifCode(max int) string {
 	b := make([]byte, max)
 	n, err := io.ReadAtLeast(rand.Reader, b, max)

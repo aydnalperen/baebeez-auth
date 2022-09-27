@@ -33,6 +33,7 @@ func main() {
 
 	protected.POST("/like", controller.AddToLikes)
 	protected.GET("/matches", controller.GetMatches)
+	protected.POST("/verify-user", controller.VerifyUser)
 	protected.Static("/images", "./images")
 
 	r.Run(":8080")
