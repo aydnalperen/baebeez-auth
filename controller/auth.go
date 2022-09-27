@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/http"
+	"net/mail"
 	"os"
 
 	"golang.org/x/crypto/bcrypt"
@@ -14,11 +15,21 @@ import (
 	"github.com/google/uuid"
 )
 
+func IsEmailValid(email string) bool {
+	_, err := mail.ParseAddress(email)
+	return err == nil
+}
+
 func Register(ctx *gin.Context) {
 	var input models.RegisterInput
 
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if !IsEmailValid(input.Mail) {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid email!"})
 		return
 	}
 
