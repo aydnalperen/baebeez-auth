@@ -25,7 +25,7 @@ func main() {
 
 	public.POST("/login", controller.Login)
 	public.POST("/register", controller.Register)
-	// will be protected after mail verification is done
+
 	protected := r.Group("/protected")
 	protected.Use(middleware.JwtAuthMiddleWare())
 	protected.POST("/saveprofile", controller.SaveProfile)
@@ -36,7 +36,7 @@ func main() {
 	protected.GET("/getusers", controller.GetUsers)
 
 	protected.POST("/update/", controller.UpdateUser)
-	protected.POST("/images/", controller.UploadImage)
+	protected.POST("/savephoto/", controller.UploadImage)
 
 	protected.POST("/like", controller.AddToLikes)
 	protected.GET("/matches", controller.GetMatches)

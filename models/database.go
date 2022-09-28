@@ -39,5 +39,7 @@ func ConnectDataBase() {
 	DB.AutoMigrate(&UserAuth{})
 	DB.AutoMigrate(&User{})
 	DB.AutoMigrate(&VerifCode{})
+	DB.AutoMigrate(&Like{})
+	DB.AutoMigrate(&Match{})
 
 }

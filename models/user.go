@@ -12,7 +12,7 @@ import (
 type User struct {
 	gorm.Model
 	Uid        string `gorm:"size:255;not null;unique" json:"uid"`
-	Photo      string `gorm:"size:255;not null;unique" json:"photo"`
+	Photo      string `gorm:"size:255;unique" json:"photo"`
 	Major      string `gorm:"size:255;not null;" json:"major"`
 	Year       int    `gorm:"not null;" json:"year"`
 	Bio        string `gorm:"not null;" json:"bio"`
