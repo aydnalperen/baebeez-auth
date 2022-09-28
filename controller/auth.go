@@ -58,7 +58,7 @@ func Register(ctx *gin.Context) {
 	verifCode.SaveVerifCode()
 
 	SendMail(ctx, user.Mail, verifCode.VerifCode)
-	ctx.JSON(http.StatusOK, gin.H{"message": "registered!", "mail": user.Mail, "password": user.Password})
+	ctx.JSON(http.StatusOK, gin.H{"message": "registered!"})
 }
 func SaveProfile(ctx *gin.Context) {
 	var input models.ProfileInput
@@ -116,6 +116,7 @@ func CurrentUser(ctx *gin.Context) {
 		return
 	}
 
+	user.Password = " "
 	ctx.JSON(http.StatusOK, gin.H{"message": "success", "data": user})
 }
 
