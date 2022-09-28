@@ -6,6 +6,8 @@ import (
 	"baebeez-auth/models"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
+	"github.com/go-playground/validator/v10"
 )
 
 func main() {
@@ -13,6 +15,11 @@ func main() {
 	models.ConnectDataBase()
 
 	r := gin.Default()
+
+	// add custom validator
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		v.RegisterValidation("EmailDomainCheck", models.EmailDomainCheck)
+	}
 
 	public := r.Group("/auth")
 
