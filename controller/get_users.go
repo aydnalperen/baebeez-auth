@@ -2,7 +2,6 @@ package controller
 
 import (
 	"baebeez-auth/models"
-	"baebeez-auth/utils"
 	"math/rand"
 	"net/http"
 	"time"
@@ -11,10 +10,10 @@ import (
 )
 
 func GetUsers(ctx *gin.Context) {
-	uid, _ := utils.ExtractTokenUID(ctx)
+	// uid, _ := utils.ExtractTokenUID(ctx)
 	var users []models.User
 
-	query := "SELECT * FROM users INNER JOIN matches ON users.uid = matches.person1 "
+	// query := "SELECT * FROM users INNER JOIN matches ON users.uid = matches.person1 "
 	if result := models.DB.Find(&users); result.Error != nil {
 		ctx.AbortWithError(http.StatusNotFound, result.Error)
 		return
