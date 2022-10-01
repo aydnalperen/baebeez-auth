@@ -5,7 +5,7 @@ import "github.com/jinzhu/gorm"
 type Like struct {
 	gorm.Model
 	Source      string `gorm:"size:255;not null;" json:"source"`
-	Destination string `gorm:"size:255;not null;"`
+	Destination string `gorm:"size:255;not null;" json:"destination"`
 }
 
 func NewLike(src string, dest string) *Like {
