@@ -18,7 +18,8 @@ func AddToLikes(ctx *gin.Context) {
 	like := models.NewLike(source, destUid)
 
 	models.DB.Save(like)
-
+	//after create ile yapılabilir her like eklendikten sonra 
+	//otomatik olarak match var mı diye kontrol ettirebiliriz. GORM-HOOKS
 	if CheckMatch(source, destUid) {
 		match := models.NewMatch(source, destUid)
 

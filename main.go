@@ -4,6 +4,7 @@ import (
 	"baebeez-auth/controller"
 	"baebeez-auth/middleware"
 	"baebeez-auth/models"
+	"baebeez-auth/validations"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -23,8 +24,8 @@ func main() {
 
 	public := r.Group("/auth")
 
-	public.POST("/login", controller.Login)
-	public.POST("/register", controller.Register)
+	public.POST("/login", validations.LoginValidation, controller.Login)
+	public.POST("/register", validations.RegisterValidation, controller.Register)
 	// will be protected after mail verification is done
 	protected := r.Group("/protected")
 	protected.Use(middleware.JwtAuthMiddleWare())
