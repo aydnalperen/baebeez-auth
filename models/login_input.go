@@ -12,6 +12,6 @@ var EmailDomainCheck validator.Func = func(fl validator.FieldLevel) bool {
 }
 
 type LoginInput struct {
-	Mail     string `json:"mail" binding:"required,email,EmailDomainCheck"`
+	Mail     string `json:"mail" binding:"required"`
 	Password string `json:"password" binding:"required,min=8,max=20"`
 }

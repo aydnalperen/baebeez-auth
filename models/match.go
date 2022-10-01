@@ -4,14 +4,14 @@ import "github.com/jinzhu/gorm"
 
 type Match struct {
 	gorm.Model
-	person1 string `gorm:"not null;"`
-	person2 string `gorm:"not null;"`
+	Person1 string `gorm:"size:255;not null;"`
+	Person2 string `gorm:"size:255;not null;"`
 }
 
 func NewMatch(src string, dest string) *Match {
 	l := new(Match)
-	l.person1 = src
-	l.person2 = dest
+	l.Person1 = src
+	l.Person2 = dest
 
 	return l
 }

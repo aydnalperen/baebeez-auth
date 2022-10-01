@@ -10,7 +10,7 @@ import (
 type VerifCode struct {
 	gorm.Model
 	Uid              string `gorm:"size:255;not null;unique" json:"uid"`
-	SendDate         string `gorm:"size:255;not null;unique" json:"send_date"`
+	SendDate         string `gorm:"size:255" json:"send_date"`
 	VerifCode        string `gorm:"size:255;not null;" json:"verif_code"`
 	CodeEntryCounter int    `gorm:"default:0" json:"entry_counter"`
 }
