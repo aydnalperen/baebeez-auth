@@ -43,6 +43,16 @@ func UploadImage(ctx *gin.Context) {
 
 	models.DB.Model(&models.User{}).Where("uid = ?", uid).Update("photo", dst)
 
+	MakeCompleted(ctx)
 	ctx.Status(http.StatusOK)
+
+}
+
+func MakeCompleted(ctx *gin.Context) { //
+	uid, _ := utils.ExtractTokenUID(ctx)
+	if result := models.DB.Model(&models.User{}).Where("uid=?", uid).Update("iscomp", 1); result != nil {
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
 
 }
