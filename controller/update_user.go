@@ -3,6 +3,7 @@ package controller
 import (
 	"baebeez-auth/models"
 	"baebeez-auth/utils"
+	"baebeez-auth/validations"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -19,13 +20,16 @@ type UpdateUserRequestBody struct {
 func UpdateUser(ctx *gin.Context) {
 	uid, _ := utils.ExtractTokenUID(ctx)
 
-	body := UpdateUserRequestBody{}
+	// body := UpdateUserRequestBody{}
 	var user models.User
 
-	if err := ctx.BindJSON(&body); err != nil {
-		ctx.AbortWithError(http.StatusBadRequest, err)
-		return
-	}
+	// if err := ctx.BindJSON(&body); err != nil {
+	// 	ctx.AbortWithError(http.StatusBadRequest, err)
+	// 	return
+	// }
+	data, _ := ctx.Get("UpdateUserInput")
+
+	body := data.(validations.UpdateUserSchema)
 
 	if result := models.DB.First(&user, uid); result.Error != nil {
 		ctx.AbortWithError(http.StatusNotFound, result.Error)

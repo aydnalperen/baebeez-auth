@@ -68,12 +68,15 @@ func Register(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "registered!", "mail": user.Mail, "password": user.Password})
 }
 func SaveProfile(ctx *gin.Context) {
-	var input models.ProfileInput
+	// var input models.ProfileInput
 
-	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	// if err := ctx.ShouldBindJSON(&input); err != nil {
+	// 	ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// 	return
+	// }
+	data, _ := ctx.Get("ProfileInput")
+
+	input := data.(validations.ProfileSchema)
 
 	var user models.User
 

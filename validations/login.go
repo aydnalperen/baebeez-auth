@@ -13,17 +13,18 @@ var EmailDomainCheck validator.Func = func(fl validator.FieldLevel) bool {
 
 }
 
-type LoginInput struct {
+type LoginSchema struct {
 	Mail     string `json:"mail" binding:"required,email,EmailDomainCheck"`
 	Password string `json:"password" binding:"required,min=8,max=20"`
 }
 
 func LoginValidation(c *gin.Context) {
-	var input LoginInput
+	var input LoginSchema
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		c.Abort()
 		return
 	}
+	c.Set("loginInput", input)
 	c.Next()
 }

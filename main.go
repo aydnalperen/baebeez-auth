@@ -29,14 +29,14 @@ func main() {
 	// will be protected after mail verification is done
 	protected := r.Group("/protected")
 	protected.Use(middleware.JwtAuthMiddleWare())
-	protected.POST("/saveprofile", controller.SaveProfile)
+	protected.POST("/saveprofile", validations.ProfileValidation, controller.SaveProfile)
 	protected.GET("/user", controller.CurrentUser)
 	protected.POST("/logout", controller.Logout)
 
 	protected.GET("/getuserbyuid", controller.GetUserByUid)
 	protected.GET("/getusers", controller.GetUsers)
 
-	protected.POST("/update/", controller.UpdateUser)
+	protected.POST("/update/", validations.UpdateUserValidation, controller.UpdateUser)
 	protected.POST("/images/", controller.UploadImage)
 
 	protected.POST("/like", controller.AddToLikes)
