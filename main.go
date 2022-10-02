@@ -35,8 +35,8 @@ func main() {
 	protected.GET("/getuserbyuid", controller.GetUserByUid)
 	protected.GET("/getusers", controller.GetUsers)
 
-	protected.POST("/update/", controller.UpdateUser)
-	protected.POST("/savephoto/", controller.UploadImage)
+	protected.POST("/update", controller.UpdateUser)
+	protected.POST("/savephoto", controller.UploadImage)
 
 	protected.POST("/like", controller.AddToLikes)
 	protected.GET("/matches", controller.GetMatches)
