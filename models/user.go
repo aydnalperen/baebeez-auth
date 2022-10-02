@@ -25,8 +25,8 @@ type UserAuth struct {
 	Uid             string `gorm:"size:255;not null;unique" json:"uid"`
 	Mail            string `gorm:"size:255;not null;unique" json:"mail" binding:"required"`
 	Password        string `json:"password" binding:"required"`
-	IsComp          int    `gorm:"default:0" json:"isverif"`
-	IsVerified      int    `gorm:"default:0;" json:"iscomp"`
+	IsComp          int    `gorm:"default:0" json:"iscomp"`
+	IsVerified      int    `gorm:"default:0;" json:"isverif"`
 	LastConnectedIp string `json:"ip"`
 }
 
