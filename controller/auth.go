@@ -81,7 +81,6 @@ func SaveProfile(ctx *gin.Context) {
 	user.Bio = input.Bio
 	user.Name = input.Name
 	user.Major = input.Major
-	user.Photo = input.Photo
 	user.Year = input.Year
 	user.Uid = uuid.NewString()
 
