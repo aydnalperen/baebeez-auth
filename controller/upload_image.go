@@ -41,7 +41,7 @@ func UploadImage(ctx *gin.Context) {
 		return
 	}
 
-	models.DB.Model(&models.User{}).Where("uid = ?", uid).Update("photo", dst)
+	models.DB.Model(&models.User{}).Where("uid = ?", uid).Update("photo", "images/"+handler.Filename)
 
 	MakeCompleted(ctx)
 	ctx.Status(http.StatusOK)
