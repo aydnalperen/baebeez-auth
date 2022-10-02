@@ -60,13 +60,7 @@ func Register(ctx *gin.Context) {
 
 	SendMail(ctx, user.Mail, verifCode.VerifCode)
 
-	token, err := utils.GenerateToken(user.Uid, ctx)
-
-	if err != nil {
-		return
-	}
-
-	ctx.JSON(http.StatusOK, gin.H{"message": "registered!", "token": token})
+	ctx.JSON(http.StatusOK, gin.H{"message": "registered!", "uid": user.Uid})
 }
 func SaveProfile(ctx *gin.Context) {
 	var input models.ProfileInput
