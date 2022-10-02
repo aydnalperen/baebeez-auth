@@ -82,7 +82,7 @@ func SaveProfile(ctx *gin.Context) {
 	user.Name = input.Name
 	user.Major = input.Major
 	user.Year = input.Year
-	user.Uid = uuid.NewString()
+	user.Uid, _ = utils.ExtractTokenUID(ctx)
 
 	_, err := user.SaveUser()
 
