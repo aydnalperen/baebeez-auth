@@ -3,8 +3,10 @@ package controller
 import (
 	"baebeez-auth/models"
 	"baebeez-auth/utils"
+	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 
@@ -30,6 +32,14 @@ func UploadImage(ctx *gin.Context) {
 		return
 	}
 
+	path := "images"
+	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
+		err := os.Mkdir(path, os.ModePerm)
+		if err != nil {
+			log.Println(err)
+		}
+	}
+
 	dst, err := os.Create("images/" + handler.Filename)
 	defer dst.Close()
 	if err != nil {
@@ -41,10 +51,10 @@ func UploadImage(ctx *gin.Context) {
 		return
 	}
 
-	models.DB.Model(&models.User{}).Where("uid = ?", uid).Update("photo=?", "images/"+handler.Filename)
+	models.DB.Model(&models.User{}).Where("uid = ?", uid).Update("photo", "images/"+handler.Filename)
 
 	MakeCompleted(ctx)
-	ctx.Status(http.StatusOK)
+	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 
 }
 
