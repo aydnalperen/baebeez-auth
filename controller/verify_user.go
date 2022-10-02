@@ -20,6 +20,7 @@ func VerifyUser(ctx *gin.Context) {
 
 	lastVerifCode := models.GetLastVerifCodeByUid(uid)
 
+	models.IncreaseCounter(uid)
 	if lastVerifCode == " " {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "verification code does not exist!"})
 		return

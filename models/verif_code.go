@@ -44,3 +44,7 @@ func CreateVerifCode(max int) string {
 }
 
 var table = [...]byte{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
+
+func IncreaseCounter(uid string) {
+	DB.Model(&VerifCode{}).Where("uid=?", uid).Update("counter +?", 1)
+}
