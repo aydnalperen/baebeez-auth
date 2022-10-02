@@ -87,7 +87,7 @@ func SaveProfile(ctx *gin.Context) {
 	_, err := user.SaveUser()
 
 	if err != nil {
-		ctx.AbortWithError(http.StatusBadRequest, err)
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "validated!"})
