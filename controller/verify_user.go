@@ -8,14 +8,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func VerifyUser(ctx *gin.Context) {
-	verif_code, is_exists := ctx.Params.Get("verif_code")
+type VerifyUserRequestBody struct {
+	VerifCode string `json:"verif_code"`
+}
 
-	if !is_exists {
+func VerifyUser(ctx *gin.Context) {
+
+	var verifCode VerifyUserRequestBody
+	if err := ctx.ShouldBindJSON(&verifCode); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "verification code required!"})
 		return
 	}
 
+	verif_code := verifCode.VerifCode
 	uid, _ := utils.ExtractTokenUID(ctx)
 
 	lastVerifCode := models.GetLastVerifCodeByUid(uid)

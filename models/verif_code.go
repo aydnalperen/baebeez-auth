@@ -25,7 +25,7 @@ func (v *VerifCode) SaveVerifCode() (*VerifCode, error) {
 func GetLastVerifCodeByUid(uid string) string {
 	var verifcode VerifCode
 
-	if result := DB.Model(&VerifCode{}).Where("uid=?", uid).Order("date DESC").First(&verifcode); result != nil {
+	if result := DB.Model(&VerifCode{}).Where("uid=?", uid).Find(&verifcode); result.Error != nil {
 		return " "
 	}
 

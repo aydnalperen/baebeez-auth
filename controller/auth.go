@@ -41,6 +41,7 @@ func Register(ctx *gin.Context) {
 
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
 	}
 	user.Password = string(hashedPassword) // user creation is done
 

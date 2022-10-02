@@ -81,7 +81,7 @@ func GetUserByUid(Uid string) (UserAuth, error) {
 func MakeUserValid(uid string) error {
 	var user UserAuth
 
-	if result := DB.Model(&UserAuth{}).Where("uid=?", uid).First(&user); result != nil {
+	if result := DB.Model(&UserAuth{}).Where("uid=?", uid).First(&user); result.Error != nil {
 		return result.Error
 	}
 
