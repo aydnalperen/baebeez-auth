@@ -30,6 +30,8 @@ func main() {
 	protected.Use(middleware.JwtAuthMiddleWare())
 	protected.POST("/saveprofile", controller.SaveProfile)
 	protected.GET("/user", controller.CurrentUser)
+	protected.GET("/profile", controller.GetProfile)
+
 	protected.POST("/logout", controller.Logout)
 
 	protected.GET("/getuserbyuid", controller.GetUserByUid)

@@ -96,3 +96,12 @@ func MakeUserValid(uid string) error {
 
 	return nil
 }
+func GetProfile(uid string) (User, error) {
+
+	var user User
+	if result := DB.Model(&User{}).Where("uid=?", uid).Find(&user); result.Error != nil {
+		return user, result.Error
+	}
+
+	return user, nil
+}
