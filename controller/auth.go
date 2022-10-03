@@ -93,9 +93,14 @@ func Login(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "username or password is incorrect."})
 	}
 	token, err := models.LoginCheck(input.Mail, input.Password, ctx)
-
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "username or password is incorrect."})
+		return
+	}
+
+	if token == "" {
+		ctx.JSON(http.StatusServiceUnavailable, gin.H{"error": "not verified"})
+		return
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"token": token})

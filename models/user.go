@@ -61,6 +61,11 @@ func LoginCheck(mail string, password string, c *gin.Context) (string, error) {
 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
 		return "", err
 	}
+
+	if user.IsVerified != 1 {
+		return "", nil
+	}
+
 	token, err := utils.GenerateToken(user.Uid, c)
 
 	if err != nil {
