@@ -37,6 +37,7 @@ func UploadImage(ctx *gin.Context) {
 		err := os.Mkdir(path, os.ModePerm)
 		if err != nil {
 			log.Println(err)
+			return
 		}
 	}
 
