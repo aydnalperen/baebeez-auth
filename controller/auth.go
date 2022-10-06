@@ -3,6 +3,7 @@ package controller
 import (
 	"baebeez-auth/models"
 	"baebeez-auth/utils"
+	"baebeez-auth/validations"
 	"bytes"
 	"encoding/json"
 	"net/http"
@@ -21,17 +22,23 @@ func IsEmailValid(email string) bool {
 }
 
 func Register(ctx *gin.Context) {
-	var input models.RegisterInput
 
-	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	// var input models.RegisterInput
 
-	if !IsEmailValid(input.Mail) {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid email!"})
-		return
-	}
+	// if err := ctx.ShouldBindJSON(&input); err != nil {
+	// 	ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// 	return
+	// }
+
+	data, _ := ctx.Get("RegisterInput")
+
+	input := data.(validations.RegisterSchema)
+
+	//bu kısma gerek yok zaten binding email derken bu işlem yapılıyor
+	// if !IsEmailValid(input.Mail) {
+	// 	ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid email!"})
+	// 	return
+	// }
 
 	var user models.UserAuth
 
@@ -63,12 +70,15 @@ func Register(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "registered!", "uid": user.Uid})
 }
 func SaveProfile(ctx *gin.Context) {
-	var input models.ProfileInput
+	// var input models.ProfileInput
 
-	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	// if err := ctx.ShouldBindJSON(&input); err != nil {
+	// 	ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// 	return
+	// }
+	data, _ := ctx.Get("ProfileInput")
+
+	input := data.(validations.ProfileSchema)
 
 	var user models.User
 
@@ -88,19 +98,17 @@ func SaveProfile(ctx *gin.Context) {
 
 }
 func Login(ctx *gin.Context) {
-	var input models.LoginInput
-	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "username or password is incorrect."})
-	}
+	// var input models.LoginInput
+	// if err := ctx.ShouldBindJSON(&input); err != nil {
+	// 	ctx.JSON(http.StatusBadRequest, gin.H{"error": "username or password is incorrect."})
+	// }
+	data, _ := ctx.Get("LoginInput")
+
+	input := data.(validations.LoginSchema)
 	token, err := models.LoginCheck(input.Mail, input.Password, ctx)
+
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "username or password is incorrect."})
-		return
-	}
-
-	if token == "" {
-		ctx.JSON(http.StatusServiceUnavailable, gin.H{"error": "not verified"})
-		return
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"token": token})
@@ -123,7 +131,6 @@ func CurrentUser(ctx *gin.Context) {
 		return
 	}
 
-	user.Password = " "
 	ctx.JSON(http.StatusOK, gin.H{"message": "success", "data": user})
 }
 
